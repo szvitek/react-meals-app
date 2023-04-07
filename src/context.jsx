@@ -9,12 +9,13 @@ import {
 
 const AppContext = createContext();
 
-const allMealsUrl = 'https://www.themealdb.com/api/json/v1/1/search.php?s=a';
+const allMealsUrl = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const randomMealUrl = 'https://www.themealdb.com/api/json/v1/1/random.php';
 
 const AppProvider = ({ children }) => {
   const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   /*
   Why useCallback? Well, since the function is declared outside of useEffect, you
@@ -39,13 +40,26 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const fetchRandomMeal = () => {
+    fetchMeals(randomMealUrl);
+  };
+
+  // only on first load fetch some data
   useEffect(() => {
     // call the function
     fetchMeals(allMealsUrl);
   }, [fetchMeals]);
 
+  // handle search logic (prevent multiple requests from search component)
+  useEffect(() => {
+    if (!searchTerm) return;
+    fetchMeals(`${allMealsUrl}${searchTerm}`);
+  }, [fetchMeals, searchTerm]);
+
   return (
-    <AppContext.Provider value={{ loading, meals }}>
+    <AppContext.Provider
+      value={{ loading, meals, setSearchTerm, fetchRandomMeal }}
+    >
       {children}
     </AppContext.Provider>
   );
