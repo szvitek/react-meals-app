@@ -16,6 +16,8 @@ const AppProvider = ({ children }) => {
   const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState(null);
 
   /*
   Why useCallback? Well, since the function is declared outside of useEffect, you
@@ -44,6 +46,17 @@ const AppProvider = ({ children }) => {
     fetchMeals(randomMealUrl);
   };
 
+  const selectMeal = (idMeal, favoriteMeal) => {
+    const meal = meals.find((meal) => meal.idMeal === idMeal);
+
+    setSelectedMeal(meal);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   // only on first load fetch some data
   useEffect(() => {
     // call the function
@@ -58,7 +71,16 @@ const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ loading, meals, setSearchTerm, fetchRandomMeal }}
+      value={{
+        loading,
+        meals,
+        setSearchTerm,
+        fetchRandomMeal,
+        showModal,
+        selectMeal,
+        selectedMeal,
+        closeModal,
+      }}
     >
       {children}
     </AppContext.Provider>

@@ -2,15 +2,17 @@ import './App.css';
 import Search from './components/Search';
 // import Favorites from './components/Favorites';
 import Meals from './components/Meals';
-// import Modal from './components/Modal';
+import Modal from './components/Modal';
+import { useAppContext } from './context';
 
 function App() {
+  const { showModal } = useAppContext();
   return (
     <main>
       <Search />
       {/* <Favorites /> */}
       <Meals />
-      {/* <Modal /> */}
+      {showModal && <Modal />}
     </main>
   );
 }

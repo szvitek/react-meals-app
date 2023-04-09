@@ -2,7 +2,7 @@ import { useAppContext } from '../context';
 import { BsHandThumbsUp } from 'react-icons/bs';
 
 const Meals = () => {
-  const { loading, meals } = useAppContext();
+  const { loading, meals, selectMeal } = useAppContext();
   if (loading) {
     return (
       <section className="section">
@@ -23,7 +23,12 @@ const Meals = () => {
     <section className="section-center">
       {meals.map(({ idMeal: id, strMeal: title, strMealThumb: image }) => (
         <article key={id} className="single-meal">
-          <img src={image} alt={title} className="img" />
+          <img
+            src={image}
+            alt={title}
+            className="img"
+            onClick={() => selectMeal(id)}
+          />
           <footer>
             <h5>{title}</h5>
             <button className="like-btn">
